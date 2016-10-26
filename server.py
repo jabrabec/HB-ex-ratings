@@ -64,11 +64,11 @@ def register_process():
 def show_login():
     """Show login form."""
 
-    # if session["logged_in_customer_email"] is None:
-    return render_template("login_form.html")
-    # else:
-    #     flash("You are already logged in.")
-    #     return redirect("/")
+    if session.get("logged_in_customer_email") == None:
+        return render_template("login_form.html")
+    else:
+        flash("You are already logged in.")
+        return redirect("/")
 
 
 @app.route("/login", methods=["POST"])
@@ -94,15 +94,23 @@ def process_login():
 
     session["logged_in_customer_email"] = user.email
     flash("Logged in.")
-    return redirect("/")
+    # rated_movies = db.session.
+
+    return render_template("/user_detail.html", user=user)
 
 @app.route("/logout")
 def process_logout():
     """Log user out."""
 
-    del session["logged_in_customer_email"]
-    flash("Logged out.")
-    return redirect("/")
+
+    if session.get("logged_in_customer_email") == None:
+        flash("You are not logged in.")
+        return redirect("/")
+    else:
+        del session["logged_in_customer_email"]
+        flash("Logged out.")
+        return redirect("/")
+
 
 
 if __name__ == "__main__":

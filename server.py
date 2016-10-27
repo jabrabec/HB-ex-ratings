@@ -35,6 +35,14 @@ def user_list():
     return render_template("user_list.html", users=users)
 
 
+@app.route("/movies")
+def movie_list():
+    """Show list of movies."""
+
+    movies = Movie.query.order_by(Movie.title).all()
+    return render_template("movie_list.html", movies=movies)
+
+
 @app.route('/register', methods=['GET'])
 def register_form():
     """Register new user"""
@@ -94,9 +102,42 @@ def process_login():
 
     session["logged_in_customer_email"] = user.email
     flash("Logged in.")
-    # rated_movies = db.session.
 
     return render_template("/user_detail.html", user=user)
+    # return redirect()
+
+
+@app.route("/users/<user_id>")
+def user_detail(user_id):
+    """User details page."""
+
+    # user = db.session.query(User).filter(User.user_id==user_id).first()
+    user = User.query.get(user_id)
+    return render_template("/user_detail.html", user=user)
+
+
+@app.route("/movies/<movie_id>")
+def movie_detail(movie_id):
+    """Movie details page."""
+
+    # movie = Movie.query.get(movie_id)
+
+    user_email = session.get("logged_in_customer_email")
+    if user_email == None:
+            score = None;
+    else:
+        user = (User.query.filter_by(email=user_email)).first()
+        ratings = user.ratings
+
+        #         if :
+        # else:
+        for rating on ratings
+         if rating.movie.movie_id == movie_id
+            score = x
+        else
+            score = y
+
+    return render_template("/movie_detail.html", movie=movie, score=score)
 
 @app.route("/logout")
 def process_logout():

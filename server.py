@@ -122,22 +122,11 @@ def movie_detail(movie_id):
 
     # movie = Movie.query.get(movie_id)
 
-    user_email = session.get("logged_in_customer_email")
-    if user_email == None:
-            score = None;
-    else:
-        user = (User.query.filter_by(email=user_email)).first()
-        ratings = user.ratings
+    # user_email = session.get("logged_in_customer_email")
+    # user = User.query(User).filter_by(User.email = user_email)
+    # user_rating = user.ratings.
 
-        #         if :
-        # else:
-        for rating on ratings
-         if rating.movie.movie_id == movie_id
-            score = x
-        else
-            score = y
-
-    return render_template("/movie_detail.html", movie=movie, score=score)
+    # return render_template("/movie_detail.html", movie=movie, score=score)
 
 @app.route("/logout")
 def process_logout():

@@ -101,6 +101,8 @@ def process_login():
         return redirect("/login")
 
     session["logged_in_customer_email"] = user.email
+    # alternate session storage for logged in user:
+    # session["logged_in_user"] = user
     flash("Logged in.")
 
     return render_template("/user_detail.html", user=user)
@@ -120,13 +122,33 @@ def user_detail(user_id):
 def movie_detail(movie_id):
     """Movie details page."""
 
-    # movie = Movie.query.get(movie_id)
+    movie = Movie.query.get(movie_id)
 
-    # user_email = session.get("logged_in_customer_email")
-    # user = User.query(User).filter_by(User.email = user_email)
-    # user_rating = user.ratings.
+    user_rating = None;
 
-    # return render_template("/movie_detail.html", movie=movie, score=score)
+    user_email = session.get("logged_in_customer_email")
+
+    if user_email:
+        user_id = User.query.filter(User.email==user_email).first().user_id
+        user_rating = Rating.query.filter(Rating.movie_id==movie_id, Rating.user_id==user_id).first()
+    
+    return render_template("/movie_detail.html", movie=movie, user_rating=user_rating)
+
+
+@app.route("/movie_score/<movie_id>", methods=['POST'])
+def process_score(movie_id):
+    """Movie score saved to DB."""
+    
+    score = int(request.form.get('score'))
+
+    user_email = session.get("logged_in_customer_email")
+    user_id = User.query.filter(User.email==user_email).first().user_id
+    new_score = Rating(movie_id=movie_id, user_id=user_id, score=score)
+    db.session.add(new_score)
+    db.session.commit()
+
+    return redirect("/movies/%s" %movie_id)
+
 
 @app.route("/logout")
 def process_logout():

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>Information about the movie:{{ movie.title }}</h2>
+    
+{% if session.get("logged_in_customer_email") %}
+
+    {% if user_rating %}
+      <div> Your score for this movie is: {{ user_rating.score }} </div>
+    {% else %}
+    Rate this movie now!
+    <form action='/movie_score/{{ movie.movie_id }}' method = 'POST'>
+      <input type="radio" name="score" value="1">1
+      <input type="radio" name="score" value="2">2
+      <input type="radio" name="score" value="3">3
+      <input type="radio" name="score" value="4">4
+      <input type="radio" name="score" value="5">5
+      <input type="submit">
+    </form>
+    {% endif %}
+  {% else %}
+{% endif %}
+
+    <div>Ratings:  
+      
+      <ul>
+        {% for rating in movie.ratings %}
+          <li> User score: {{ rating.score }}
+          </li>
+      {% endfor %}
+    </ul></div>
+
+{% endblock %}
+
+

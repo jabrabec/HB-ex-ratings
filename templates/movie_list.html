@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>Movies</h2>
+      <ul>
+        {% for movie in movies %}
+          <li>
+              {% if movie.title == '' %}
+              <a href="/movies/{{ movie.movie_id }}">(no title)
+                {{ movie.title }}
+              </a>
+              {% else %}
+              <a href="/movies/{{ movie.movie_id }}">
+                {{ movie.title }}
+              </a>
+              {% endif %}
+          </li>
+      {% endfor %}
+    </ul>
+
+{% endblock %}
